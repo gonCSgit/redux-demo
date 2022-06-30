@@ -42,3 +42,8 @@ export interface ListState {
   name: string;
   flag: string;
 }
+
+export interface AddCountryStateProps {
+  query: string,
+  regionsObj: TransformedData[]
+}
