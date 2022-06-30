@@ -9,22 +9,6 @@ const App = () => {
   const [fetchError, setFetchError] = useState(false);
   const [queryState, setQueryState] = useState("");
   const [fieldDisable, setFieldDisable] = useState(false);
-  const [message, setMessage] = useState("");
-
-  const searchFieldHandler = (
-    event: KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    if (event.key === "Enter") {
-      setQueryState(event.currentTarget.value);
-      setFieldDisable(true);
-    }
-  };
-
-  const clearFieldHandler = () => {
-    setFieldDisable(false);
-    setQueryState("");
-    setMessage("");
-  };
 
   const fetchCountriesHandler = useCallback(async () => {
     try {
@@ -67,22 +51,35 @@ const App = () => {
     fetchCountriesHandler();
   }, [fetchCountriesHandler]);
 
+  const searchFieldHandler = (
+    event: KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    if (event.key === "Enter") {
+      setQueryState(event.currentTarget.value);
+      setFieldDisable(true);
+    }
+  };
+
+  const clearFieldHandler = () => {
+    setQueryState("");
+    setFieldDisable(false);
+  };
+
   return (
     <div>
       <Box sx={{ display: "flex", justifyContent: "center" }}>
-        <Input
-          disabled={fieldDisable}
-          placeholder="Search..."
-          onChange={(event) => setMessage(event.target.value)}
-          value={message}
-          onKeyDown={(event) => {
-            searchFieldHandler(event);
-          }}
-        />
+        <form onReset={clearFieldHandler}>
+          <Input
+            type="text"
+            disabled={fieldDisable}
+            placeholder="Search..."
+            onKeyDown={(event) => {
+              searchFieldHandler(event);
+            }}
+          />
 
-        {queryState !== "" && (
-          <Button onClick={clearFieldHandler}>Clear</Button>
-        )}
+          {queryState !== "" && <Button type="reset">Clear</Button>}
+        </form>
       </Box>
 
       <br />
